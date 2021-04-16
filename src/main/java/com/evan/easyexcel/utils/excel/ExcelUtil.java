@@ -8,6 +8,7 @@ import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
 import com.alibaba.excel.write.metadata.style.WriteFont;
 import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
+import com.evan.easyexcel.service.TExcelService;
 import com.evan.easyexcel.utils.common.BeanConvert;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
@@ -35,9 +36,9 @@ public class ExcelUtil {
      * @param sheetNo sheet序号
      * @return 返回实体列表(需转换)
      */
-    public static <T> List<T> readExcel(MultipartFile excel, Class<T> clazz,int sheetNo) {
+    public static <T> List<T> readExcel(MultipartFile excel, Class<T> clazz,int sheetNo, TExcelService service) {
 
-        ExcelListener excelListener = new ExcelListener();
+        ExcelListener excelListener = new ExcelListener(service);
 
         ExcelReader excelReader = getReader(excel,clazz,excelListener);
         if (excelReader == null) {
@@ -163,6 +164,7 @@ public class ExcelUtil {
             }
             fileName = new String(filePath.getBytes(), "ISO-8859-1");
             response.addHeader("Content-Disposition", "filename=" + fileName);
+            file.delete();
             return response.getOutputStream();
         } catch (IOException  e) {
             e.printStackTrace();

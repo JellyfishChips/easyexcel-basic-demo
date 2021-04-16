@@ -2,7 +2,10 @@ package com.evan.easyexcel.controller;
 
 import com.evan.easyexcel.model.ExportModel;
 import com.evan.easyexcel.model.ImportModel;
+import com.evan.easyexcel.service.TExcelService;
 import com.evan.easyexcel.utils.excel.ExcelUtil;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,19 +23,26 @@ import java.util.List;
  * @Version 1.0.0
  * @Date 2020/4/1 21:25
  */
+@Slf4j
 @RestController
 @RequestMapping(value = "/easyExcel")
 public class ExcelTestController {
 
+    @Autowired
+    private TExcelService excelService;
+
     @PostMapping(value = "/import")
     public List<ImportModel> read(MultipartFile excel) {
-        return ExcelUtil.readExcel(excel, ImportModel.class, 0);
+        List<ImportModel> importModels = ExcelUtil.readExcel(excel, ImportModel.class, 0, excelService);
+        log.info("data:{}", importModels);
+        return importModels;
     }
 
     @GetMapping(value = "/export")
     public void writeExcel(HttpServletResponse response) {
         List<ExportModel> list = getList();
-        String fileName = "Excel导出测试";
+        list.add(new ExportModel("嗷嗷", "安安", 22));
+        String fileName = "Excel导出测试1222";
         String sheetName = "sheet1";
         ExcelUtil.writeDynamicHeadExcel(response, list, fileName, sheetName, ExportModel.class, head());
     }

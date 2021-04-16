@@ -4,7 +4,9 @@ import com.alibaba.excel.annotation.ExcelProperty;
 import com.alibaba.excel.annotation.write.style.ColumnWidth;
 import com.alibaba.excel.annotation.write.style.ContentRowHeight;
 import com.alibaba.excel.annotation.write.style.HeadRowHeight;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @ClassName ExportModel
@@ -17,6 +19,8 @@ import lombok.Data;
 @HeadRowHeight(25)
 @ColumnWidth(25)
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExportModel  {
 
     @ExcelProperty(value = "姓名" ,index = 0)
